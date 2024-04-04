@@ -16,7 +16,7 @@ mongoose.connect(mongoDB);
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', function () {
-	console.log('Connected to MongoDB');
+	console.log('Connected to MongoDB✅');
 });
 
 //mount router
@@ -24,5 +24,5 @@ app.use(router);
 
 /**Initialization */
 app.listen(5000, async () => {
-	console.log('Server is live');
+	console.log('Server is live✅');
 });
