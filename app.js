@@ -4,8 +4,6 @@ import mongoose from 'mongoose';
 
 const app = express();
 
-app.use(express.json());
-
 //För att connect till databasen.
 const mongoDB =
 	'mongodb+srv://johan1hakansson:V2SzLxUaFGj61TVk@cluster0.ftnhogo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
@@ -19,8 +17,10 @@ db.once('open', function () {
 	console.log('Connected to MongoDB✅');
 });
 
+app.use(express.json());
+
 //mount router
-app.use(router);
+app.use('/', router);
 
 /**Initialization */
 app.listen(5000, async () => {
