@@ -1,0 +1,19 @@
+{
+  "name": "chattapp",
+  "version": "1.0.0",
+  "description": "skol Uppgift en backend tjänst för en chatt-app.",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "chat-app-Grupp-3"
+  },
+  "author": "Grupp 3",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
