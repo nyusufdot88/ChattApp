@@ -4,6 +4,9 @@ const router = express.Router();
 
 /**Routes */
 router
+	.get('/', function (req, res) {
+		res.redirect('/api/broadcast');
+	})
 	.get('/api/broadcast', chattAppController.getAllBroadcastMsg)
 	.post('/api/broadcast', chattAppController.createBroadcastMsg)
 	.get('/api/channel/', chattAppController.getChannelList)
