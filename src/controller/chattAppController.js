@@ -1,9 +1,15 @@
 // hämta alla meddelanden som skickats till broadcast kanalen
+import path from 'path';
+import { fileURLToPath } from 'url';
+
 const getAllBroadcastMsg = (req, res) => {
-	res.status(200).json({
-		Success: true,
-		msg: 'hämta alla meddelanden som skickats till broadcast kanalen',
-	});
+	const publicPath = path.join(
+		path.dirname(fileURLToPath(import.meta.url)),
+		'..',
+		'public',
+		'index.html'
+	);
+	res.sendFile(publicPath);
 };
 
 // skapa ett nytt meddelande i broadcast kanalen
