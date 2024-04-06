@@ -21,7 +21,7 @@ const getChannelList = (req, res) => {
 
 //Hämta en channel
 const getChannelById = (req, res) => {
-	res.status(200).json({ Success: true, msg: 'Show all broadcast' });
+	res.status(200).json({ Success: true, msg: 'Show all Channel' });
 };
 
 // Skapa en ny channel
