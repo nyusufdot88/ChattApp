@@ -35,12 +35,19 @@ io.on('connection', (socket) => {
 		console.log('Användare kopplade från');
 	});
 
-	socket.on('chat message', (msg) => {
-		const message = new Message({ message: msg, sender: 'Anonym' });
-		message.save().then(() => {
-			// Save the message to the database
-			io.emit('chat message', msg);
-		});
+	socket.on('chat message', (data) => {
+		// Bytt `msg` till `data` för tydlighet
+		const { msg, sender } = data; // Extrahera både meddelandetexten och avsändaren
+		const message = new Message({ message: msg, sender: sender });
+		message
+			.save()
+			.then(() => {
+				// Sparat meddelandet till databasen, nu skicka det till alla anslutna
+				io.emit('chat message', { msg, sender }); // Skicka tillbaka både meddelande och avsändare
+			})
+			.catch((err) => {
+				console.error('Fel vid sparning av meddelande:', err);
+			});
 	});
 });
 
