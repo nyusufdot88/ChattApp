@@ -27,12 +27,12 @@ const createBroadcastMsg = (req, res) => {
 
 //GET all channels
 const getChannelList = (req, res) => {
-	res.status(200).json({ Success: true, msg: 'hämtar en lista över kanaler' });
+	res.status(200).json({ Success: true, msg: 'Ny html fil' });
 };
 
 //GET a specific channel
 const getChannelById = (req, res) => {
-	res.status(200).json({ Success: true, msg: 'Show all broadcast' });
+	res.status(200).json({ Success: true, msg: 'Ny html fil' });
 };
 
 // POST a specific channel
