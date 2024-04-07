@@ -25,20 +25,28 @@
 			const socket = io();
 
 			const form = document.getElementById('form');
-			const input = document.getElementById('input');
-			const username = document.getElementById('username');
+			const input = document.getElementById('input'); // Input för meddelande
+			const username = document.getElementById('username'); // Input för användarnamn
 
 			form.addEventListener('submit', function (e) {
 				e.preventDefault();
-				if (input.value) {
-					socket.emit('chat message', input.value);
-					input.value = '';
+				if (input.value && username.value) {
+					// Skapar ett objekt som innehåller både meddelande och avsändare
+					const messageData = {
+						msg: input.value,
+						sender: username.value,
+					};
+					// Skicka detta objekt till servern
+					socket.emit('chat message', messageData);
+					input.value = ''; // Tömmer inputfältet för meddelandet efter att det skickats
 				}
 			});
 
-			socket.on('chat message', function (msg) {
+			// Ta emot meddelanden från servern
+			socket.on('chat message', function (data) {
 				const item = document.createElement('li');
-				item.textContent = msg;
+				// Använder både meddelande och avsändare för att visa i UI
+				item.textContent = data.sender + ': ' + data.msg;
 				document.getElementById('messages').appendChild(item);
 				window.scrollTo(0, document.body.scrollHeight);
 			});
