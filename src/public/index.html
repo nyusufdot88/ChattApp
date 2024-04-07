@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>ChattApp</title>
+		<link rel="stylesheet" href="/css/broadcast.css" />
+	</head>
+	<body>
+		<nav>
+			<a href="/api/broadcast">Homepage</a> |
+			<a href="/api/channel/">All Channels</a> |
+			<a href="/api/broadcast/">See all messages</a> |
+		</nav>
+
+		<ul id="messages"></ul>
+		<form id="form" action="">
+			<!-- UserName -->
+			<input id="username" autocomplete="off" placeholder="Användarnamn" />
+			<!-- Message -->
+			<input id="input" autocomplete="off" placeholder="Skriv ett meddelande" />
+			<button>Skicka</button>
+		</form>
+
+		<script src="/socket.io/socket.io.js"></script>
+		<script>
+			const socket = io();
+
+			const form = document.getElementById('form');
+			const input = document.getElementById('input');
+			const username = document.getElementById('username');
+
+			form.addEventListener('submit', function (e) {
+				e.preventDefault();
+				if (input.value) {
+					socket.emit('chat message', input.value);
+					input.value = '';
+				}
+			});
+
+			socket.on('chat message', function (msg) {
+				const item = document.createElement('li');
+				item.textContent = msg;
+				document.getElementById('messages').appendChild(item);
+				window.scrollTo(0, document.body.scrollHeight);
+			});
+		</script>
+	</body>
+</html>
