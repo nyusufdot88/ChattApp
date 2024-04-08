@@ -3,7 +3,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 //GET all messages from broadcast channel
-// Här i ska vi också kunna hämta alla meddelanden som skickats till broadcast kanalen
 const getAllBroadcastMsg = (req, res) => {
 	const publicPath = path.join(
 		path.dirname(fileURLToPath(import.meta.url)),

@@ -29,21 +29,32 @@ app.use(express.static('public')); //mount static folder
 
 //------------------// Hantera Socket.IO-anslutningar-----------------------------
 io.on('connection', (socket) => {
-	console.log('En användare anslöt');
+	console.log('En användare anslöt till socket.io✅');
 
 	socket.on('disconnect', () => {
-		console.log('Användare kopplade från');
+		console.log('Användare kopplade från ❌');
+	});
+
+	// Skicka befintliga meddelanden till den nyanlända användaren
+	Message.find({}).then((messages) => {
+		// console.log('Hämtade alla meddelanden:', messages);
+		socket.emit('load all messages', messages);
 	});
 
 	socket.on('chat message', (data) => {
-		// Bytt `msg` till `data` för tydlighet
-		const { msg, sender } = data; // Extrahera både meddelandetexten och avsändaren
-		const message = new Message({ message: msg, sender: sender });
+		const message = new Message({
+			message: data.msg,
+			sender: data.sender,
+		});
 		message
 			.save()
 			.then(() => {
-				// Sparat meddelandet till databasen, nu skicka det till alla anslutna
-				io.emit('chat message', { msg, sender }); // Skicka tillbaka både meddelande och avsändare
+				// När meddelandet är sparat, sänd det till alla anslutna klienter
+				io.emit('chat message', {
+					msg: message.message,
+					sender: message.sender,
+					timestamp: message.timestamp,
+				});
 			})
 			.catch((err) => {
 				console.error('Fel vid sparning av meddelande:', err);

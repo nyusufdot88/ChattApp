@@ -21,8 +21,23 @@
 		</form>
 
 		<script src="/socket.io/socket.io.js"></script>
+
 		<script>
 			const socket = io();
+
+			// När sidan laddas, lyssna på 'load all messages'-händelsen för att få alla befintliga meddelanden
+			socket.on('load all messages', function (messages) {
+				messages.forEach(function (message) {
+					// För varje meddelande, lägg till det till en lista eller annat element på sidan
+					const item = document.createElement('li');
+					const date = new Date(message.timestamp);
+					const time = date.toLocaleTimeString();
+
+					item.textContent = `${message.sender}: ${message.message} (${time})`; // Anpassa beroende på ditt meddelandeobjekt
+
+					document.getElementById('messages').appendChild(item);
+				});
+			});
 
 			const form = document.getElementById('form');
 			const input = document.getElementById('input'); // Input för meddelande
@@ -30,11 +45,13 @@
 
 			form.addEventListener('submit', function (e) {
 				e.preventDefault();
-				if (input.value && username.value) {
+				const senderName = username.value || 'Anonym'; // Använder 'Anonym' om inget användarnamn angivits
+				if (input.value) {
+					// Kontrollerar bara om det finns ett meddelande att skicka
 					// Skapar ett objekt som innehåller både meddelande och avsändare
 					const messageData = {
 						msg: input.value,
-						sender: username.value,
+						sender: senderName,
 					};
 					// Skicka detta objekt till servern
 					socket.emit('chat message', messageData);
@@ -42,11 +59,11 @@
 				}
 			});
 
-			// Ta emot meddelanden från servern
+			// Ta emot meddelanden från servern och lägg till dem på sidan
 			socket.on('chat message', function (data) {
 				const item = document.createElement('li');
-				// Använder både meddelande och avsändare för att visa i UI
-				item.textContent = data.sender + ': ' + data.msg;
+				const time = new Date(data.timestamp).toLocaleTimeString(); // Konvertera timestamp till läsbar tid
+				item.textContent = `${data.sender}: ${data.msg} (${time}):`;
 				document.getElementById('messages').appendChild(item);
 				window.scrollTo(0, document.body.scrollHeight);
 			});
