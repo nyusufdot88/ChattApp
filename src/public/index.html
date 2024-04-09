@@ -21,34 +21,49 @@
 		</form>
 
 		<script src="/socket.io/socket.io.js"></script>
+
 		<script>
 			const socket = io();
 
+			// When the page loads, listen for the 'load all messages' event to receive all existing messages
+			socket.on('load all messages', function (messages) {
+				messages.forEach(function (message) {
+					// Create a list and convert the date
+					const item = document.createElement('li');
+					const date = new Date(message.timestamp);
+					const time = date.toLocaleTimeString();
+
+					item.textContent = `${message.sender}: ${message.message} (${time})`;
+
+					document.getElementById('messages').appendChild(item);
+				});
+			});
+
 			const form = document.getElementById('form');
-			const input = document.getElementById('input'); // Input för meddelande
-			const username = document.getElementById('username'); // Input för användarnamn
+			const input = document.getElementById('input');
+			const username = document.getElementById('username');
 
 			form.addEventListener('submit', function (e) {
 				e.preventDefault();
-				if (input.value && username.value) {
-					// Skapar ett objekt som innehåller både meddelande och avsändare
+				const senderName = username.value || 'Anonym'; //Use Anonym if no username.
+
+				if (input.value) {
 					const messageData = {
 						msg: input.value,
-						sender: username.value,
+						sender: senderName,
 					};
-					// Skicka detta objekt till servern
 					socket.emit('chat message', messageData);
-					input.value = ''; // Tömmer inputfältet för meddelandet efter att det skickats
+					input.value = ''; //Makes the inputfield empty after sending the message
 				}
 			});
 
-			// Ta emot meddelanden från servern
+			// Displays the messages on the page, and scrolls to the latest message.
 			socket.on('chat message', function (data) {
 				const item = document.createElement('li');
-				// Använder både meddelande och avsändare för att visa i UI
-				item.textContent = data.sender + ': ' + data.msg;
+				const time = new Date(data.timestamp).toLocaleTimeString();
+
+				item.textContent = `${data.sender}: ${data.msg} (${time}):`;
 				document.getElementById('messages').appendChild(item);
-				window.scrollTo(0, document.body.scrollHeight);
 			});
 		</script>
 	</body>
