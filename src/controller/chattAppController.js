@@ -13,21 +13,12 @@ const getAllBroadcastMsg = (req, res) => {
 		'public',
 		'index.html'
 	);
-	// Send the index.html file as response
-	res.sendFile(publicPath);
-};
-
-// Function to create all messages for broadcast channel
-const createBroadcastMsg = (req, res) => {
-	// Get the public path for the index.html file
-	const publicPath = path.join(
-		path.dirname(fileURLToPath(import.meta.url)),
-		'..',
-		'public',
-		'index.html'
-	);
-	// Send the index.html file as response
-	res.sendFile(publicPath);
+	res.sendFile(publicPath, (err) => {
+		if (err) {
+			console.error('Failed to send file:', err);
+			res.status(500).send('Server Error: Could not send file.');
+		}
+	});
 };
 
 /// Channel code start
@@ -129,7 +120,6 @@ const createMessageInChannel = async (req, res) => {
 		const newMessage = new Message({
 			message: message,
 			channelID: channelId,
-			// Assuming you have user authentication and you're getting the sender from req.user
 		});
 
 		// Save the new message to the database
@@ -145,7 +135,6 @@ const createMessageInChannel = async (req, res) => {
 
 export default {
 	getAllBroadcastMsg,
-	createBroadcastMsg,
 	getChannelList,
 	createChannel,
 	createMessageInChannel,

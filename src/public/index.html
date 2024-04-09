@@ -8,7 +8,6 @@
 		<nav>
 			<a href="/api/broadcast">Homepage</a> |
 			<a href="/api/channel/">All Channels</a> |
-			<a href="/api/broadcast/">See all messages</a> |
 		</nav>
 
 		<ul id="messages"></ul>
@@ -53,7 +52,7 @@
 						sender: senderName,
 					};
 					socket.emit('chat message', messageData);
-					input.value = ''; //Makes the inputfield empty after sending the message
+					input.value = ''; //Makes the input field empty after sending the message
 				}
 			});
 

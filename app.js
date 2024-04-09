@@ -24,9 +24,9 @@ db.once('open', function () {
 app.use(express.json());
 //mount router
 app.use('/', router);
-app.use(express.static('public')); //mount static folder
+app.use(express.static('public')); //Serve static files
 
-//------------------// Hantera Socket.IO-anslutningar-----------------------------
+//------------------// Handel Socket.IO connections-----------------------------
 io.on('connection', (socket) => {
 	console.log('En användare anslöt till socket.io✅');
 
@@ -36,7 +36,6 @@ io.on('connection', (socket) => {
 
 	// Sends all the messages to all connected clients
 	Message.find({}).then((messages) => {
-		// console.log('Hämtade alla meddelanden:', messages);
 		socket.emit('load all messages', messages);
 	});
 
