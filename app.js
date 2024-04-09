@@ -9,12 +9,11 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-//-----------För att connect till databasen----------------------------
+//-----------To connect to the db----------------------------
 const mongoDB =
 	'mongodb+srv://johan1hakansson:V2SzLxUaFGj61TVk@cluster0.ftnhogo.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 mongoose.connect(mongoDB);
 
-// Logga till konsolen om vi är anslutna till databasen
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', function () {
@@ -35,7 +34,7 @@ io.on('connection', (socket) => {
 		console.log('Användare kopplade från ❌');
 	});
 
-	// Skicka befintliga meddelanden till den nyanlända användaren
+	// Sends all the messages to all connected clients
 	Message.find({}).then((messages) => {
 		// console.log('Hämtade alla meddelanden:', messages);
 		socket.emit('load all messages', messages);
@@ -49,7 +48,7 @@ io.on('connection', (socket) => {
 		message
 			.save()
 			.then(() => {
-				// När meddelandet är sparat, sänd det till alla anslutna klienter
+				// When the message is saved, send it to all connected clients
 				io.emit('chat message', {
 					msg: message.message,
 					sender: message.sender,
