@@ -61,7 +61,6 @@ const createChannel = async (req, res) => {
 		// Create a new channel instance
 		const newChannel = new Channel({
 			channelName: channelName,
-			// Assuming you have user authentication and you're getting the username from req.user
 		});
 
 		// Save the new channel to the database
